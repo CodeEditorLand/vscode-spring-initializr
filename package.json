@@ -1,179 +1,205 @@
 {
-	"name": "vscode-spring-initializr",
-	"displayName": "Spring Initializr Java Support",
-	"description": "A lightweight extension based on Spring Initializr to generate quick start Spring Boot Java projects.",
-	"main": "./dist/extension",
-	"scripts": {
-		"compile": "webpack --mode development",
-		"update-tpn": "node scripts/update-third-party-notice.js"
-	},
-	"contributes": {
-		"commands": [
-			{
-				"category": "Spring Initializr",
-				"command": "spring.initializr.createProject",
-				"title": "Create a Spring Boot Project..."
-			},
-			{
-				"category": "Spring Initializr",
-				"command": "spring.initializr.maven-project",
-				"title": "Create a Maven Project..."
-			},
-			{
-				"category": "Spring Initializr",
-				"command": "spring.initializr.gradle-project",
-				"title": "Create a Gradle Project..."
-			},
-			{
-				"category": "Spring Initializr",
-				"command": "spring.initializr.addStarters",
-				"title": "Add Starters..."
-			}
-		],
-		"configuration": {
-			"properties": {
-				"spring.initializr.defaultArtifactId": {
-					"default": "demo",
-					"description": "Default value for Artifact Id.",
-					"scope": "window",
-					"type": "string"
-				},
-				"spring.initializr.defaultGroupId": {
-					"default": "com.example",
-					"description": "Default value for Group Id.",
-					"scope": "window",
-					"type": "string"
-				},
-				"spring.initializr.defaultJavaVersion": {
-					"default": "",
-					"description": "Default Java version.",
-					"enum": [
-						"",
-						"11",
-						"15",
-						"8"
-					],
-					"scope": "window",
-					"type": "string"
-				},
-				"spring.initializr.defaultLanguage": {
-					"default": "",
-					"description": "Default language.",
-					"enum": [
-						"",
-						"Java",
-						"Kotlin",
-						"Groovy"
-					],
-					"scope": "window",
-					"type": "string"
-				},
-				"spring.initializr.defaultOpenProjectMethod": {
-					"default": "",
-					"description": "Default method of opening newly generated project",
-					"enum": [
-						"",
-						"Open",
-						"Add to Workspace"
-					],
-					"scope": "window",
-					"type": "string"
-				},
-				"spring.initializr.defaultPackaging": {
-					"default": "",
-					"description": "Default packaging.",
-					"enum": [
-						"",
-						"JAR",
-						"WAR"
-					],
-					"scope": "window",
-					"type": "string"
-				},
-				"spring.initializr.parentFolder": {
-					"default": "artifactId",
-					"description": "Controls if a new sub-folder should be created for the newly generated project.",
-					"enum": [
-						"artifactId",
-						"none"
-					],
-					"enumDescriptions": [
-						"Place project in a folder named after Artifact Id",
-						"Do not create a folder for the project"
-					],
-					"scope": "window",
-					"type": "string"
-				},
-				"spring.initializr.serviceUrl": {
-					"default": [
-						"https://start.spring.io"
-					],
-					"description": "Spring Initializr Service URL(s). If more than one url is specified, it requires you to select one every time you create a project.",
-					"pattern": "https?://.+",
-					"scope": "window",
-					"type": [
-						"string",
-						"array"
-					]
-				}
-			},
-			"title": "Spring Initializr"
-		},
-		"menus": {
-			"commandPalette": [
-				{
-					"command": "spring.initializr.createProject",
-					"when": "never"
-				},
-				{
-					"command": "spring.initializr.maven-project",
-					"when": "!virtualWorkspace"
-				},
-				{
-					"command": "spring.initializr.gradle-project",
-					"when": "!virtualWorkspace"
-				}
-			],
-			"editor/context": [
-				{
-					"command": "spring.initializr.addStarters",
-					"group": "SpringInitializr",
-					"when": "resourceFilename == pom.xml"
-				}
-			],
-			"explorer/context": [
-				{
-					"command": "spring.initializr.addStarters",
-					"group": "SpringInitializr",
-					"when": "resourceFilename == pom.xml"
-				}
-			]
-		}
-	},
-	"activationEvents": [
-		"workspaceContains:.vscode/NEWLY_CREATED_BY_SPRING_INITIALIZR"
-	],
-	"dependencies": {
-		"extract-zip": "^2.0.1",
-		"fs-extra": "^11.2.0",
-		"htmlparser2": "^9.1.0",
-		"lodash": "^4.17.21",
-		"md5": "^2.3.0",
-		"xml2js": "^0.6.2"
-	},
-	"devDependencies": {
-		"@types/fs-extra": "^11.0.4",
-		"@types/glob": "^8.1.0",
-		"@types/lodash": "^4.17.5",
-		"@types/md5": "^2.3.5",
-		"@types/node": "^20.14.8",
-		"@types/xml2js": "^0.4.14",
-		"glob": "^10.4.2",
-		"ts-loader": "^9.5.1"
-	},
-	"icon": "resources/logo.png",
-	"aiKey": "05fb8871-fbf0-488f-8453-a74cf0ca9b93",
-	"capabilities": {
-		"virtualWorkspaces": true
-	}
+  "name": "vscode-spring-initializr",
+  "displayName": "Spring Initializr Java Support",
+  "description": "A lightweight extension based on Spring Initializr to generate quick start Spring Boot Java projects.",
+  "version": "0.11.2",
+  "icon": "resources/logo.png",
+  "publisher": "vscjava",
+  "aiKey": "05fb8871-fbf0-488f-8453-a74cf0ca9b93",
+  "homepage": "https://github.com/Microsoft/vscode-spring-initializr",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/vscode-spring-initializr.git"
+  },
+  "engines": {
+    "vscode": "1.74.0"
+  },
+  "capabilities": {
+    "virtualWorkspaces": true
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:.vscode/NEWLY_CREATED_BY_SPRING_INITIALIZR"
+  ],
+  "main": "./dist/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "spring.initializr.createProject",
+        "title": "Create a Spring Boot Project...",
+        "category": "Spring Initializr"
+      },
+      {
+        "command": "spring.initializr.maven-project",
+        "title": "Create a Maven Project...",
+        "category": "Spring Initializr"
+      },
+      {
+        "command": "spring.initializr.gradle-project",
+        "title": "Create a Gradle Project...",
+        "category": "Spring Initializr"
+      },
+      {
+        "command": "spring.initializr.addStarters",
+        "title": "Add Starters...",
+        "category": "Spring Initializr"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "spring.initializr.createProject",
+          "when": "never"
+        },
+        {
+          "command": "spring.initializr.maven-project",
+          "when": "!virtualWorkspace"
+        },
+        {
+          "command": "spring.initializr.gradle-project",
+          "when": "!virtualWorkspace"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "resourceFilename == pom.xml",
+          "command": "spring.initializr.addStarters",
+          "group": "SpringInitializr"
+        }
+      ],
+      "explorer/context": [
+        {
+          "when": "resourceFilename == pom.xml",
+          "command": "spring.initializr.addStarters",
+          "group": "SpringInitializr"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Spring Initializr",
+      "properties": {
+        "spring.initializr.serviceUrl": {
+          "default": [
+            "https://start.spring.io"
+          ],
+          "type": [
+            "string",
+            "array"
+          ],
+          "pattern": "https?://.+",
+          "scope": "window",
+          "description": "Spring Initializr Service URL(s). If more than one url is specified, it requires you to select one every time you create a project."
+        },
+        "spring.initializr.defaultLanguage": {
+          "default": "",
+          "type": "string",
+          "enum": [
+            "",
+            "Java",
+            "Kotlin",
+            "Groovy"
+          ],
+          "scope": "window",
+          "description": "Default language."
+        },
+        "spring.initializr.defaultJavaVersion": {
+          "default": "",
+          "type": "string",
+          "enum": [
+            "",
+            "11",
+            "15",
+            "8"
+          ],
+          "scope": "window",
+          "description": "Default Java version."
+        },
+        "spring.initializr.defaultGroupId": {
+          "default": "com.example",
+          "type": "string",
+          "scope": "window",
+          "description": "Default value for Group Id."
+        },
+        "spring.initializr.defaultArtifactId": {
+          "default": "demo",
+          "type": "string",
+          "scope": "window",
+          "description": "Default value for Artifact Id."
+        },
+        "spring.initializr.defaultPackaging": {
+          "default": "",
+          "type": "string",
+          "enum": [
+            "",
+            "JAR",
+            "WAR"
+          ],
+          "scope": "window",
+          "description": "Default packaging."
+        },
+        "spring.initializr.defaultOpenProjectMethod": {
+          "default": "",
+          "type": "string",
+          "scope": "window",
+          "description": "Default method of opening newly generated project",
+          "enum": [
+            "",
+            "Open",
+            "Add to Workspace"
+          ]
+        },
+        "spring.initializr.parentFolder": {
+          "default": "artifactId",
+          "type": "string",
+          "enum": [
+            "artifactId",
+            "none"
+          ],
+          "enumDescriptions": [
+            "Place project in a folder named after Artifact Id",
+            "Do not create a folder for the project"
+          ],
+          "scope": "window",
+          "description": "Controls if a new sub-folder should be created for the newly generated project."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "webpack --mode production",
+    "compile": "webpack --mode development",
+    "tslint": "tslint -t verbose src/*.ts",
+    "watch": "webpack --mode development --watch",
+    "test": "npm run compile && tsc -p . && node ./out/test/runTest.js",
+    "update-tpn": "node scripts/update-third-party-notice.js"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "11.0.4",
+    "@types/glob": "8.1.0",
+    "@types/lodash": "4.17.5",
+    "@types/md5": "2.3.5",
+    "@types/mocha": "10.0.6",
+    "@types/node": "20.14.5",
+    "@types/vscode": "1.90.0",
+    "@types/xml2js": "0.4.14",
+    "@vscode/test-electron": "2.4.0",
+    "glob": "10.4.1",
+    "mocha": "10.4.0",
+    "ts-loader": "9.5.1",
+    "tslint": "5.20.1",
+    "typescript": "5.4.5",
+    "webpack": "5.92.0",
+    "webpack-cli": "5.1.4"
+  },
+  "dependencies": {
+    "extract-zip": "2.0.1",
+    "fs-extra": "11.2.0",
+    "htmlparser2": "9.1.0",
+    "lodash": "4.17.21",
+    "md5": "2.3.0",
+    "vscode-extension-telemetry-wrapper": "0.14.0",
+    "xml2js": "0.6.2"
+  }
 }
