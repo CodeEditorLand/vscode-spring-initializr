@@ -1,0 +1,16 @@
+.vscode/**
+.vscode-test/**
+dist/**/*.map
+src/**
+.gitignore
+tsconfig.json
+images/**
+TestPlan.md
+.github/**
+.travis.yml
+webpack.*.js
+node_modules/**
+out/**
+.*
+scripts
+.azure-pipelines/**
