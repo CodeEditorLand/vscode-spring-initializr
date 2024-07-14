@@ -1,11 +1,10 @@
 {
-	"name": "vscode-spring-initializr",
-	"displayName": "Spring Initializr Java Support",
-	"description": "A lightweight extension based on Spring Initializr to generate quick start Spring Boot Java projects.",
-	"main": "./dist/extension",
-	"scripts": {
-		"compile": "webpack --mode development",
-		"update-tpn": "node scripts/update-third-party-notice.js"
+	"activationEvents": [
+		"workspaceContains:.vscode/NEWLY_CREATED_BY_SPRING_INITIALIZR"
+	],
+	"aiKey": "05fb8871-fbf0-488f-8453-a74cf0ca9b93",
+	"capabilities": {
+		"virtualWorkspaces": true
 	},
 	"contributes": {
 		"commands": [
@@ -150,9 +149,6 @@
 			]
 		}
 	},
-	"activationEvents": [
-		"workspaceContains:.vscode/NEWLY_CREATED_BY_SPRING_INITIALIZR"
-	],
 	"dependencies": {
 		"extract-zip": "^1.7.0",
 		"fs-extra": "^5.0.0",
@@ -161,6 +157,7 @@
 		"md5": "^2.3.0",
 		"xml2js": "^0.5.0"
 	},
+	"description": "A lightweight extension based on Spring Initializr to generate quick start Spring Boot Java projects.",
 	"devDependencies": {
 		"@types/fs-extra": "^5.1.0",
 		"@types/glob": "^7.2.0",
@@ -171,9 +168,12 @@
 		"glob": "^7.2.3",
 		"ts-loader": "^9.4.2"
 	},
+	"displayName": "Spring Initializr Java Support",
 	"icon": "resources/logo.png",
-	"aiKey": "05fb8871-fbf0-488f-8453-a74cf0ca9b93",
-	"capabilities": {
-		"virtualWorkspaces": true
+	"main": "./dist/extension",
+	"name": "vscode-spring-initializr",
+	"scripts": {
+		"compile": "webpack --mode development",
+		"update-tpn": "node scripts/update-third-party-notice.js"
 	}
 }
