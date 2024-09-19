@@ -15,18 +15,20 @@ import { BaseHandler } from "./BaseHandler";
 import { IDefaultProjectData, IProjectMetadata, IStep, ParentFolder } from "./HandlerInterfaces";
 import { SpecifyArtifactIdStep } from "./SpecifyArtifactIdStep";
 import { SpecifyGroupIdStep } from "./SpecifyGroupIdStep";
+import { SpecifyPackageNameStep } from "./SpecifyPackageNameStep";
 import { SpecifyServiceUrlStep } from "./SpecifyServiceUrlStep";
+import { ProjectType } from "../model";
 
 const OPEN_IN_NEW_WORKSPACE = "Open";
 const OPEN_IN_CURRENT_WORKSPACE = "Add to Workspace";
 
 export class GenerateProjectHandler extends BaseHandler {
 
-    private projectType: "maven-project" | "gradle-project";
+    private projectType: ProjectType;
     private outputUri: vscode.Uri;
     private metadata: IProjectMetadata;
 
-    constructor(projectType: "maven-project" | "gradle-project", defaults?: IDefaultProjectData) {
+    constructor(projectType: ProjectType, defaults?: IDefaultProjectData) {
         super();
         this.projectType = projectType;
         this.metadata = {
@@ -46,6 +48,7 @@ export class GenerateProjectHandler extends BaseHandler {
 
         SpecifyArtifactIdStep.getInstance().resetDefaultInput();
         SpecifyGroupIdStep.getInstance().resetDefaultInput();
+        SpecifyPackageNameStep.getInstance().resetDefaultInput();
         while (step !== undefined) {
             step = await step.execute(operationId, this.metadata);
         }
@@ -87,6 +90,7 @@ export class GenerateProjectHandler extends BaseHandler {
             `javaVersion=${this.metadata.javaVersion}`,
             `groupId=${this.metadata.groupId}`,
             `artifactId=${this.metadata.artifactId}`,
+            `packageName=${this.metadata.packageName}`,
             `name=${this.metadata.artifactId}`,
             `packaging=${this.metadata.packaging}`,
             `bootVersion=${this.metadata.bootVersion}`,
