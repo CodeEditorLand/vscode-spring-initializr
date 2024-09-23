@@ -155,23 +155,23 @@
 		}
 	},
 	"dependencies": {
-		"extract-zip": "^1.7.0",
-		"fs-extra": "^5.0.0",
-		"htmlparser2": "^7.2.0",
-		"lodash": "^4.17.21",
-		"md5": "^2.3.0",
-		"xml2js": "^0.5.0"
+		"extract-zip": "2.0.1",
+		"fs-extra": "11.2.0",
+		"htmlparser2": "9.1.0",
+		"lodash": "4.17.21",
+		"md5": "2.3.0",
+		"xml2js": "0.6.2"
 	},
 	"description": "A lightweight extension based on Spring Initializr to generate quick start Spring Boot Java projects.",
 	"devDependencies": {
-		"@types/fs-extra": "^5.1.0",
-		"@types/glob": "^7.2.0",
-		"@types/lodash": "^4.17.7",
-		"@types/md5": "^2.3.5",
-		"@types/node": "^16.18.104",
-		"@types/xml2js": "^0.4.14",
-		"glob": "^7.2.3",
-		"ts-loader": "^9.5.1"
+		"@types/fs-extra": "11.0.4",
+		"@types/glob": "8.1.0",
+		"@types/lodash": "4.17.9",
+		"@types/md5": "2.3.5",
+		"@types/node": "22.6.0",
+		"@types/xml2js": "0.4.14",
+		"glob": "11.0.0",
+		"ts-loader": "9.5.1"
 	},
 	"displayName": "Spring Initializr Java Support",
 	"icon": "resources/logo.png",
