@@ -57,7 +57,7 @@ After that, verify `build.gradle` instead of `pom.xml`.
 1. Open `User settings` in VS Code.
 2. Change value of entry `spring.initializr.serviceUrl`, e.g.
    "https://start.cfapps.io", or
-   [run the service locally](https://github.com/spring-io/initializr#running-the-app-locally)
+   [`run the service locally`](https://github.com/spring-io/initializr#running-the-app-locally)
    (if the previous one doesn't work).
 3. Verify:
     1. Can generate a project from the specified service URL.
