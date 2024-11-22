@@ -69,6 +69,7 @@ export class SpecifyGroupIdStep implements IStep {
 				projectMetadata.defaults.groupId ||
 				SpecifyGroupIdStep.getInstance().defaultInput,
 		};
+
 		return await createInputBox(inputMetaData);
 	}
 }

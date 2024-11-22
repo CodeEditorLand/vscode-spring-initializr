@@ -46,8 +46,10 @@ export class SpecifyPackagingStep implements IStep {
 			workspace
 				.getConfiguration("spring.initializr")
 				.get<string>("defaultPackaging");
+
 		if (packaging) {
 			projectMetadata.packaging = packaging && packaging.toLowerCase();
+
 			return true;
 		}
 		const pickMetaData: IPickMetadata<Packaging> = {
@@ -60,6 +62,7 @@ export class SpecifyPackagingStep implements IStep {
 				MatadataType.PACKAGING,
 			),
 		};
+
 		return await createPickBox(pickMetaData);
 	}
 }

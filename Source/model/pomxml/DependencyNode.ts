@@ -8,6 +8,7 @@ export class DependencyNode {
 	public artifactId: string;
 	public version: string;
 	public scope: string;
+
 	constructor(gid: string, aid: string, ver?: string, scp?: string) {
 		this.groupId = gid;
 		this.artifactId = aid;
@@ -20,6 +21,7 @@ export class DependencyNode {
 			groupId: [this.groupId],
 			artifactId: [this.artifactId],
 		};
+
 		if (this.version) {
 			ret.version = [this.version];
 		}

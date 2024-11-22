@@ -48,6 +48,7 @@ export class SpecifyDependenciesStep implements IStep {
 			depsType: projectMetadata.dependencies.itemType,
 			dependencies: projectMetadata.dependencies.id,
 		});
+
 		return this.getNextStep();
 	}
 
@@ -57,11 +58,15 @@ export class SpecifyDependenciesStep implements IStep {
 		const dependencyManager = new DependencyManager(
 			projectMetadata.bootVersion,
 		);
+
 		let current: IDependenciesItem = null;
+
 		let result: boolean = false;
+
 		const disposables: Disposable[] = [];
 		dependencyManager.selectedIds =
 			projectMetadata.defaults.dependencies || [];
+
 		do {
 			const quickPickItems: Array<QuickPickItem & IDependenciesItem> =
 				await dependencyManager.getQuickPickItems(
@@ -77,6 +82,7 @@ export class SpecifyDependenciesStep implements IStep {
 				pickBox.ignoreFocusOut = true;
 				pickBox.matchOnDetail = true;
 				pickBox.matchOnDescription = true;
+
 				if (projectMetadata.pickSteps.length > 0) {
 					pickBox.buttons = [QuickInputButtons.Back];
 					disposables.push(
@@ -104,7 +110,9 @@ export class SpecifyDependenciesStep implements IStep {
 					}),
 					pickBox.onDidTriggerItemButton((e) => {
 						const starter = e.item.label;
+
 						const linkItem = e.button as any as ILink;
+
 						let { href, templated } = linkItem;
 						// NOTE: so far only {bootVersion} in templates
 						if (templated && href.includes("{bootVersion}")) {
@@ -120,6 +128,7 @@ export class SpecifyDependenciesStep implements IStep {
 				disposables.push(pickBox);
 				pickBox.show();
 			});
+
 			for (const d of disposables) {
 				d.dispose();
 			}
@@ -132,6 +141,7 @@ export class SpecifyDependenciesStep implements IStep {
 		} while (current && current.itemType === "dependency");
 		projectMetadata.dependencies = current;
 		dependencyManager.updateLastUsedDependencies(current);
+
 		return result;
 	}
 }

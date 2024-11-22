@@ -16,6 +16,7 @@ export abstract class BaseHandler {
 				vscode.window.showErrorMessage(
 					`${this.failureMessage} ${error.message}`,
 				);
+
 				throw error;
 			}
 		}

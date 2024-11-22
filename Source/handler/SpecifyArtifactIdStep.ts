@@ -69,6 +69,7 @@ export class SpecifyArtifactIdStep implements IStep {
 				projectMetadata.defaults.artifactId ||
 				SpecifyArtifactIdStep.getInstance().defaultInput,
 		};
+
 		return await createInputBox(inputMetaData);
 	}
 }

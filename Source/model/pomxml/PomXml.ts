@@ -51,6 +51,7 @@ export function addDependencyNode(
 	node: IDependencyNode,
 ): void {
 	const dependenciesNode: any = ensureNode(projectNode, "dependencies", {});
+
 	if (isNullOrEmptyNode(dependenciesNode.dependency)) {
 		dependenciesNode.dependency = [node];
 	} else {
@@ -69,6 +70,7 @@ export function removeDependencyNode(
 	artifactId: string,
 ): void {
 	const dependenciesNode: any = ensureNode(projectNode, "dependencies", {});
+
 	if (!isNullOrEmptyNode(dependenciesNode.dependency)) {
 		dependenciesNode.dependency = dependenciesNode.dependency.filter(
 			(elem) =>
@@ -82,6 +84,7 @@ export function removeDependencyNode(
 
 export function getDependencyNodes(projectNode: XmlNode): IDependencyNode[] {
 	const dependenciesNode: XmlNode = getNode(projectNode, "dependencies", {});
+
 	if (dependenciesNode.dependency) {
 		return [].concat(dependenciesNode.dependency);
 	} else {
@@ -95,11 +98,13 @@ export function addBomNode(projectNode: XmlNode, node: IBomNode): void {
 		"dependencyManagement",
 		{},
 	);
+
 	const dependenciesNode: any = ensureNode(
 		dependencyManagementNode,
 		"dependencies",
 		{},
 	);
+
 	if (isNullOrEmptyNode(dependenciesNode.dependency)) {
 		dependenciesNode.dependency = [node];
 	} else {
@@ -117,6 +122,7 @@ export function addRepositoryNode(
 	node: IRepositoryNode,
 ): void {
 	const repositoriesNode: any = ensureNode(projectNode, "repositories", {});
+
 	if (isNullOrEmptyNode(repositoriesNode.repository)) {
 		repositoriesNode.repository = [node];
 	} else {
@@ -131,7 +137,9 @@ export function addRepositoryNode(
 
 export function getBootVersion(projectNode: XmlNode): string {
 	let bootVersion: string;
+
 	const parentNode: XmlNode = getNode(projectNode, "parent", {});
+
 	if (
 		getNode(parentNode, "artifactId") === "spring-boot-starter-parent" &&
 		getNode(parentNode, "groupId") === "org.springframework.boot"
@@ -148,5 +156,6 @@ export function getBootVersion(projectNode: XmlNode): string {
  */
 export function getParentRelativePath(projectNode: XmlNode): string {
 	const parentNode: XmlNode = getNode(projectNode, "parent", {});
+
 	return getNode(parentNode, "relativePath", "../pom.xml", true);
 }

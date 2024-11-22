@@ -13,12 +13,15 @@ export async function updatePom(
 	boms: IBom[],
 ) {
 	const edit = new vscode.WorkspaceEdit();
+
 	const projectNode: Element = await getActiveProjectNode();
+
 	const dependenciesNode: Element | undefined =
 		projectNode.children &&
 		(projectNode.children.find(
 			(node) => isTag(node) && node.tagName === XmlTagName.Dependencies,
 		) as Element);
+
 	if (dependenciesNode !== undefined) {
 		await updateWorkspaceEdit(
 			edit,
@@ -43,6 +46,7 @@ export async function updatePom(
 					isTag(node) &&
 					node.tagName === XmlTagName.DependencyManagement,
 			) as Element);
+
 		if (depMgmtNode !== undefined) {
 			const depsNodes: Element | undefined =
 				depMgmtNode.children &&
@@ -50,6 +54,7 @@ export async function updatePom(
 					(node) =>
 						isTag(node) && node.tagName === XmlTagName.Dependencies,
 				) as Element);
+
 			if (depsNodes !== undefined) {
 				await updateWorkspaceEdit(
 					edit,
@@ -87,7 +92,9 @@ async function getActiveProjectNode(): Promise<Element> {
 
 	// Find out <dependencies> node and insert content.
 	const content = vscode.window.activeTextEditor.document.getText();
+
 	const projectNodes: Node[] = getNodesByTag(content, XmlTagName.Project);
+
 	if (projectNodes === undefined || projectNodes.length !== 1) {
 		throw new UserError(
 			"Only support POM file with single <project> node.",
@@ -104,6 +111,7 @@ function constructNodeText(
 	eol: string,
 ): string {
 	const lines: string[] = nodeToInsert.getTextLines(indent);
+
 	return ["", ...lines].join(`${eol}${baseIndent}${indent}`) + eol;
 }
 
@@ -115,6 +123,7 @@ async function updateWorkspaceEdit(
 ): Promise<vscode.WorkspaceEdit> {
 	const currentDocument: vscode.TextDocument =
 		await vscode.workspace.openTextDocument(uri);
+
 	const baseIndent: string = getIndentation(
 		currentDocument,
 		parentNode.startIndex,
@@ -124,6 +133,7 @@ async function updateWorkspaceEdit(
 		parentNode.endIndex -
 		(parentNode.name.length + 3) /* "</parentNode>".length */ +
 		1;
+
 	let insertPos: vscode.Position = currentDocument.positionAt(insertOffset);
 	// Not to mess up indentation, move cursor to line start:
 	// <tab><tab>|</dependencies>  =>  |<tab><whitespace></dependencies>
@@ -131,9 +141,11 @@ async function updateWorkspaceEdit(
 		insertPos.line,
 		0,
 	);
+
 	const contentBefore: string = currentDocument.getText(
 		new vscode.Range(insPosLineStart, insertPos),
 	);
+
 	if (contentBefore.trim() === "") {
 		insertOffset -= insertPos.character;
 		insertPos = insPosLineStart;
@@ -141,12 +153,16 @@ async function updateWorkspaceEdit(
 
 	const textEditor: vscode.TextEditor =
 		await vscode.window.showTextDocument(currentDocument);
+
 	const options: vscode.TextEditorOptions = textEditor.options;
+
 	const indent: string = options.insertSpaces
 		? " ".repeat(options.tabSize as number)
 		: "\t";
+
 	const eol: string =
 		currentDocument.eol === vscode.EndOfLine.LF ? "\n" : "\r\n";
+
 	const targetText: string = constructNodeText(
 		nodeToInsert,
 		baseIndent,
@@ -154,6 +170,7 @@ async function updateWorkspaceEdit(
 		eol,
 	);
 	edit.insert(currentDocument.uri, insertPos, targetText);
+
 	return edit;
 }
 
@@ -163,10 +180,13 @@ async function updateWorkspaceEdit(
  */
 function getIndentation(document: vscode.TextDocument, offset: number): string {
 	const pos: vscode.Position = document.positionAt(offset);
+
 	const lineContentToPos = document.getText(
 		new vscode.Range(new vscode.Position(pos.line, 0), pos),
 	);
+
 	const m = lineContentToPos.match(/^\s+/);
+
 	return m ? m[0] : "";
 }
 
@@ -215,6 +235,7 @@ class DependencyNodes extends PomNode {
 				this.toTextLine(artifact, indent),
 			),
 		);
+
 		if (this.options && this.options.initParent) {
 			return PomNode.wrapWithParentNode(
 				listOfLines,
@@ -228,12 +249,14 @@ class DependencyNodes extends PomNode {
 
 	private toTextLine(artifact: IArtifact, indent: string): string[] {
 		const { groupId, artifactId, version, scope } = artifact;
+
 		const lines: string[] = [
 			`<groupId>${groupId}</groupId>`,
 			`<artifactId>${artifactId}</artifactId>`,
 			version && `<version>${version}</version>`,
 			scope && scope !== "compile" && `<scope>${scope}</scope>`,
 		].filter(Boolean);
+
 		return PomNode.wrapWithParentNode(lines, indent, "dependency");
 	}
 }
@@ -250,7 +273,9 @@ class BOMNodes extends PomNode {
 		const listOfLines: string[][] = this.boms.map((bom) =>
 			this.bomToTextLine(bom, indent),
 		);
+
 		let lines: string[] = [].concat(...listOfLines);
+
 		if (
 			this.options &&
 			this.options.parents &&
@@ -265,6 +290,7 @@ class BOMNodes extends PomNode {
 
 	private bomToTextLine(bom: IBom, indent: string): string[] {
 		const { groupId, artifactId, version } = bom;
+
 		const lines: string[] = [
 			`<groupId>${groupId}</groupId>`,
 			`<artifactId>${artifactId}</artifactId>`,
@@ -272,6 +298,7 @@ class BOMNodes extends PomNode {
 			`<type>pom</type>`,
 			`<scope>import</scope>`,
 		];
+
 		return PomNode.wrapWithParentNode(lines, indent, "dependency");
 	}
 }

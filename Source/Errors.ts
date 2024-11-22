@@ -7,6 +7,7 @@ import { setUserError } from "vscode-extension-telemetry-wrapper";
 export class OperationCanceledError extends Error {
 	constructor(msg?: string) {
 		super(msg);
+
 		setUserError(this);
 	}
 }

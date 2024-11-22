@@ -25,6 +25,7 @@ export interface IProjectMetadata {
 	bootVersion?: string;
 	dependencies?: IDependenciesItem;
 	pickSteps: IStep[];
+
 	defaults: IDefaultProjectData;
 	parentFolder?: ParentFolder;
 }
@@ -58,6 +59,7 @@ export interface IInputMetaData {
 	pickStep: IStep;
 	placeholder: string;
 	prompt: string;
+
 	defaultValue: string;
 }
 

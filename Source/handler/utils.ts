@@ -40,6 +40,7 @@ export async function specifyServiceUrl(
 	const configValue = vscode.workspace
 		.getConfiguration("spring.initializr")
 		.get<string | string[]>("serviceUrl");
+
 	if (typeof configValue === "string") {
 		return configValue;
 	} else if (
@@ -75,11 +76,13 @@ export async function createPickBox<T extends Identifiable>(
 		pickBox.ignoreFocusOut = true;
 		pickBox.busy = true;
 		pickBox.show();
+
 		try {
 			pickBox.items = await pickMetadata.items;
 			pickBox.busy = false;
 		} catch (error) {
 			pickBox.hide();
+
 			return reject(error);
 		}
 		if (pickMetadata.metadata.pickSteps.length > 0) {
@@ -117,6 +120,7 @@ export async function createPickBox<T extends Identifiable>(
 						pickBox.selectedItems[0].value?.id;
 				}
 				pickMetadata.metadata.pickSteps.push(pickMetadata.pickStep);
+
 				return resolve(true);
 			}),
 			pickBox.onDidHide(() => {
@@ -169,6 +173,7 @@ export async function createInputBox(
 	inputMetaData: IInputMetaData,
 ): Promise<boolean> {
 	const disposables: Disposable[] = [];
+
 	const result: boolean = await new Promise<boolean>((resolve, reject) => {
 		const inputBox: InputBox = window.createInputBox();
 		inputBox.title = inputMetaData.title;
@@ -176,6 +181,7 @@ export async function createInputBox(
 		inputBox.prompt = inputMetaData.prompt;
 		inputBox.value = inputMetaData.defaultValue;
 		inputBox.ignoreFocusOut = true;
+
 		if (inputMetaData.metadata.pickSteps.length > 0) {
 			inputBox.buttons = [QuickInputButtons.Back];
 			disposables.push(
@@ -189,6 +195,7 @@ export async function createInputBox(
 		disposables.push(
 			inputBox.onDidChangeValue(() => {
 				let validCheck: string | undefined;
+
 				if (inputMetaData.pickStep instanceof SpecifyGroupIdStep) {
 					validCheck = groupIdValidation(inputBox.value);
 				} else if (
@@ -263,6 +270,7 @@ export async function createInputBox(
 		disposables.push(inputBox);
 		inputBox.show();
 	});
+
 	for (const d of disposables) {
 		d.dispose();
 	}

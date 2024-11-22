@@ -82,6 +82,7 @@ async function initializeExtension(
 						],
 						{ placeHolder: "Select project type." },
 					);
+
 				if (projectType) {
 					await vscode.commands.executeCommand(
 						`spring.initializr.${projectType.value}`,
@@ -97,6 +98,7 @@ async function initializeExtension(
 			async (_oid: string, entry?: vscode.Uri) => {
 				const targetFile: vscode.Uri =
 					entry || (await getTargetPomXml());
+
 				if (targetFile) {
 					await vscode.window.showTextDocument(targetFile);
 					await new AddStartersHandler().run(_oid, targetFile);
@@ -116,14 +118,17 @@ async function initializeExtension(
 			vscode.workspace.workspaceFolders[0].uri.fsPath,
 			".vscode/NEWLY_CREATED_BY_SPRING_INITIALIZR",
 		);
+
 		try {
 			await fs.promises.access(flagFile);
+
 			const readmeFileUris = await vscode.workspace.findFiles(
 				new vscode.RelativePattern(
 					vscode.workspace.workspaceFolders[0],
 					"{readme,README,help,HELP}.md",
 				),
 			);
+
 			if (readmeFileUris.length > 0) {
 				await vscode.commands.executeCommand(
 					"markdown.showPreview",
@@ -150,5 +155,6 @@ function instrumentAndRegisterCommand(
 				: await cb(...args);
 		},
 	);
+
 	return vscode.commands.registerCommand(name, instrumented);
 }

@@ -13,8 +13,11 @@ import * as vscode from "vscode";
 import * as xml2js from "xml2js";
 
 let EXTENSION_PUBLISHER: string;
+
 let EXTENSION_NAME: string;
+
 let EXTENSION_VERSION: string;
+
 let EXTENSION_AI_KEY: string;
 
 export async function loadPackageInfo(
@@ -49,6 +52,7 @@ export async function downloadFile(
 ): Promise<string> {
 	const tempFilePath: string = path.join(getTempFolder(), md5(targetUrl));
 	await fse.ensureDir(getTempFolder());
+
 	if (await fse.pathExists(tempFilePath)) {
 		await fse.remove(tempFilePath);
 	}
@@ -56,6 +60,7 @@ export async function downloadFile(
 	return await new Promise(
 		(resolve: (res: string) => void, reject: (e: Error) => void): void => {
 			const urlObj: url.Url = url.parse(targetUrl);
+
 			const options = Object.assign(
 				{
 					headers: Object.assign({}, customHeaders, {
@@ -64,7 +69,9 @@ export async function downloadFile(
 				},
 				urlObj,
 			);
+
 			let client: any;
+
 			if (urlObj.protocol === "https:") {
 				client = https;
 				// tslint:disable-next-line:no-http-string
@@ -76,7 +83,9 @@ export async function downloadFile(
 			client
 				.get(options, (res: http.IncomingMessage) => {
 					let rawData: string;
+
 					let ws: fse.WriteStream;
+
 					if (readContent) {
 						rawData = "";
 					} else {
@@ -113,6 +122,7 @@ export async function writeFileToExtensionRoot(
 ): Promise<void> {
 	const extensionRootPath: string =
 		vscode.extensions.getExtension(getExtensionId()).extensionPath;
+
 	const filepath: string = path.join(extensionRootPath, relateivePath);
 	await fse.ensureFile(filepath);
 	await fse.writeFile(filepath, data);
@@ -123,9 +133,12 @@ export async function readFileFromExtensionRoot(
 ): Promise<string> {
 	const extensionRootPath: string =
 		vscode.extensions.getExtension(getExtensionId()).extensionPath;
+
 	const filepath: string = path.join(extensionRootPath, relateivePath);
+
 	if (await fse.pathExists(filepath)) {
 		const buf: Buffer = await fse.readFile(filepath);
+
 		return buf.toString();
 	} else {
 		return null;
@@ -152,6 +165,7 @@ export function packageNameValidation(value: string): string {
 
 export async function readXmlContent(xml: string, options?: {}): Promise<any> {
 	const opts: {} = Object.assign({ explicitArray: true }, options);
+
 	return new Promise<{}>(
 		(resolve: (value: {}) => void, reject: (e: Error) => void): void => {
 			xml2js.parseString(xml, opts, (err: Error, res: any) => {
@@ -167,12 +181,14 @@ export async function readXmlContent(xml: string, options?: {}): Promise<any> {
 
 export function buildXmlContent(obj: any, options?: {}): string {
 	const opts: {} = Object.assign({ explicitArray: true }, options);
+
 	return new xml2js.Builder(opts).buildObject(obj);
 }
 
 export async function getTargetPomXml(): Promise<vscode.Uri> {
 	if (vscode.window.activeTextEditor) {
 		const activeUri = vscode.window.activeTextEditor.document.uri;
+
 		if ("pom.xml" === path.basename(activeUri.path).toLowerCase()) {
 			return activeUri;
 		}
@@ -180,6 +196,7 @@ export async function getTargetPomXml(): Promise<vscode.Uri> {
 
 	const candidates: vscode.Uri[] =
 		await vscode.workspace.findFiles("**/pom.xml");
+
 	if (!_.isEmpty(candidates)) {
 		if (candidates.length === 1) {
 			return candidates[0];
@@ -203,6 +220,7 @@ function getRelativePathToWorkspaceFolder(file: vscode.Uri): string {
 	if (file) {
 		const wf: vscode.WorkspaceFolder =
 			vscode.workspace.getWorkspaceFolder(file);
+
 		if (wf) {
 			return path.relative(wf.uri.fsPath, file.fsPath);
 		}
@@ -214,6 +232,7 @@ function getWorkspaceFolderName(file: vscode.Uri): string {
 	if (file) {
 		const wf: vscode.WorkspaceFolder =
 			vscode.workspace.getWorkspaceFolder(file);
+
 		if (wf) {
 			return wf.name;
 		}

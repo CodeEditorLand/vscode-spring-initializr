@@ -26,6 +26,7 @@ import { SpecifyPackageNameStep } from "./SpecifyPackageNameStep";
 import { SpecifyServiceUrlStep } from "./SpecifyServiceUrlStep";
 
 const OPEN_IN_NEW_WORKSPACE = "Open";
+
 const OPEN_IN_CURRENT_WORKSPACE = "Add to Workspace";
 
 export class GenerateProjectHandler extends BaseHandler {
@@ -55,6 +56,7 @@ export class GenerateProjectHandler extends BaseHandler {
 		SpecifyArtifactIdStep.getInstance().resetDefaultInput();
 		SpecifyGroupIdStep.getInstance().resetDefaultInput();
 		SpecifyPackageNameStep.getInstance().resetDefaultInput();
+
 		while (step !== undefined) {
 			step = await step.execute(operationId, this.metadata);
 		}
@@ -65,6 +67,7 @@ export class GenerateProjectHandler extends BaseHandler {
 			"TargetFolder",
 			specifyTargetFolder,
 		)(this.metadata);
+
 		if (this.outputUri === undefined) {
 			throw new OperationCanceledError("Target folder not specified.");
 		}
@@ -143,6 +146,7 @@ export class GenerateProjectHandler extends BaseHandler {
 		const targetUrl = new URL(this.metadata.serviceUrl);
 		targetUrl.pathname = "/starter.zip";
 		targetUrl.search = `?${params.join("&")}`;
+
 		return targetUrl.toString();
 	}
 }
@@ -151,9 +155,13 @@ async function specifyTargetFolder(
 	metadata: IProjectMetadata,
 ): Promise<vscode.Uri> {
 	const OPTION_CONTINUE: string = "Continue";
+
 	const OPTION_CHOOSE_ANOTHER_FOLDER: string = "Choose another folder";
+
 	const LABEL_CHOOSE_FOLDER: string = "Generate into this folder";
+
 	const MESSAGE_EXISTING_FOLDER: string = `A folder [${metadata.artifactId}] already exists in the selected folder. Continue to overwrite or Choose another folder?`;
+
 	const MESSAGE_FOLDER_NOT_EMPTY: string =
 		"The selected folder is not empty. Existing files with same names will be overwritten. Continue to overwrite or Choose another folder?";
 
@@ -187,6 +195,7 @@ async function specifyTargetFolder(
 			OPTION_CONTINUE,
 			OPTION_CHOOSE_ANOTHER_FOLDER,
 		);
+
 		if (overrideChoice === OPTION_CHOOSE_ANOTHER_FOLDER) {
 			outputUri = await openDialogForFolder({
 				openLabel: LABEL_CHOOSE_FOLDER,
@@ -211,6 +220,7 @@ async function downloadAndUnzip(
 					reject: (e: Error) => void,
 				): Promise<void> => {
 					let filepath: string;
+
 					try {
 						p.report({ message: "Downloading zip package..." });
 						filepath = await downloadFile(targetUrl);
@@ -237,6 +247,7 @@ async function specifyOpenMethod(
 	let openMethod = vscode.workspace
 		.getConfiguration("spring.initializr")
 		.get<string>("defaultOpenProjectMethod");
+
 	if (
 		openMethod !== OPEN_IN_CURRENT_WORKSPACE &&
 		openMethod !== OPEN_IN_NEW_WORKSPACE

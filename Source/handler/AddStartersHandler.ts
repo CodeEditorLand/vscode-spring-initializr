@@ -33,9 +33,12 @@ export class AddStartersHandler extends BaseHandler {
 		entry: vscode.Uri,
 	): Promise<void> {
 		const bootVersion: string = await searchForBootVersion(entry);
+
 		if (!bootVersion) {
 			const ex = new Error("Not a valid Spring Boot project.");
+
 			setUserError(ex);
+
 			throw ex;
 		}
 
@@ -43,6 +46,7 @@ export class AddStartersHandler extends BaseHandler {
 		// Read pom.xml for $dependencies(gid, aid)
 		const content: string =
 			vscode.window.activeTextEditor.document.getText();
+
 		const xml: { project: XmlNode } = await readXmlContent(content);
 
 		getDependencyNodes(xml.project).forEach((elem) => {
@@ -50,6 +54,7 @@ export class AddStartersHandler extends BaseHandler {
 		});
 
 		this.serviceUrl = await specifyServiceUrl();
+
 		if (this.serviceUrl === undefined) {
 			return;
 		}
@@ -60,6 +65,7 @@ export class AddStartersHandler extends BaseHandler {
 				p.report({
 					message: `Fetching metadata for version ${bootVersion} ...`,
 				});
+
 				return await serviceManager.getStarters(
 					this.serviceUrl,
 					bootVersion,
@@ -68,22 +74,28 @@ export class AddStartersHandler extends BaseHandler {
 		);
 
 		const oldStarterIds: string[] = [];
+
 		if (!starters.dependencies) {
 			await vscode.window.showErrorMessage(
 				"Unable to retrieve information of available starters.",
 			);
+
 			return;
 		}
 
 		Object.keys(starters.dependencies).forEach((key) => {
 			const elem: IMavenId = starters.dependencies[key];
+
 			if (deps.indexOf(`${elem.groupId}:${elem.artifactId}`) >= 0) {
 				oldStarterIds.push(key);
 			}
 		});
+
 		const dependencyManager = new DependencyManager(bootVersion);
 		dependencyManager.selectedIds = [].concat(oldStarterIds);
+
 		let current: IDependenciesItem = null;
+
 		do {
 			current = await vscode.window.showQuickPick(
 				dependencyManager.getQuickPickItems(this.serviceUrl),
@@ -94,6 +106,7 @@ export class AddStartersHandler extends BaseHandler {
 					placeHolder: "Select dependencies to add.",
 				},
 			);
+
 			if (
 				current &&
 				current.itemType === "dependency" &&
@@ -102,6 +115,7 @@ export class AddStartersHandler extends BaseHandler {
 				dependencyManager.toggleDependency(current.id);
 			}
 		} while (current && current.itemType === "dependency");
+
 		if (!current) {
 			return;
 		}
@@ -110,8 +124,10 @@ export class AddStartersHandler extends BaseHandler {
 		const toAdd: string[] = dependencyManager.selectedIds.filter(
 			(elem) => oldStarterIds.indexOf(elem) < 0,
 		);
+
 		if (toAdd.length === 0) {
 			vscode.window.showInformationMessage("No changes.");
+
 			return;
 		}
 
@@ -126,41 +142,51 @@ export class AddStartersHandler extends BaseHandler {
 						.filter(Boolean)
 						.join(", ")}].`
 				: "";
+
 		const choice: string = await vscode.window.showWarningMessage(
 			`${msgAdd} Proceed?`,
 			"Proceed",
 			"Cancel",
 		);
+
 		if (choice !== "Proceed") {
 			return;
 		}
 
 		const artifacts = toAdd.map((id) => starters.dependencies[id]);
+
 		const bomIds = toAdd
 			.map((id) => starters.dependencies[id].bom)
 			.filter(Boolean);
+
 		const boms = bomIds.map((id) => starters.boms[id]);
 
 		updatePom(entry, artifacts, boms);
 		vscode.window.showInformationMessage("Pom file successfully updated.");
+
 		return;
 	}
 }
 
 async function searchForBootVersion(uri: vscode.Uri): Promise<string> {
 	const content: Uint8Array = await vscode.workspace.fs.readFile(uri);
+
 	const { project: projectNode } = await readXmlContent(content.toString());
+
 	const bootVersion: string = getBootVersion(projectNode);
+
 	if (bootVersion) {
 		return bootVersion;
 	}
 
 	// search recursively in parent pom
 	const relativePath = getParentRelativePath(projectNode);
+
 	if (relativePath) {
 		// <relativePath> not empty, search filesystem first.
 		// See https://maven.apache.org/ref/3.8.5/maven-model/maven.html#parent
 		const newPath = path.join(path.dirname(uri.path), relativePath);
+
 		let newUri = uri.with({ path: newPath });
 
 		if (await isDirectory(newUri)) {

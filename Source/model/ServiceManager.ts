@@ -30,28 +30,39 @@ class ServiceManager {
 		type: MatadataType,
 	): Promise<Array<IHandlerItem<T>>> {
 		const metadata = await this.ensureMetadata(serviceUrl);
+
 		if (!metadata) {
 			throw new Error("Failed to fetch metadata.");
 		}
 		let defaultLabel: string;
+
 		let values: any[];
+
 		switch (type) {
 			case MatadataType.BOOTVERSION:
 				defaultLabel = metadata.bootVersion.default;
 				values = metadata.bootVersion.values;
+
 				break;
+
 			case MatadataType.JAVAVERSION:
 				defaultLabel = metadata.javaVersion.default;
 				values = metadata.javaVersion.values;
+
 				break;
+
 			case MatadataType.LANGUAGE:
 				defaultLabel = metadata.language.default;
 				values = metadata.language.values;
+
 				break;
+
 			case MatadataType.PACKAGING:
 				defaultLabel = metadata.packaging.default;
 				values = metadata.packaging.values;
+
 				break;
+
 			default:
 				throw new Error("Invalid metadata type.");
 		}
@@ -59,11 +70,14 @@ class ServiceManager {
 		const sortedValues = values
 			.filter((x) => x.id === defaultLabel)
 			.concat(values.filter((x) => x.id !== defaultLabel));
+
 		switch (type) {
 			case MatadataType.BOOTVERSION:
 				return sortedValues.map((v) => ({ value: v, label: v.name }));
+
 			case MatadataType.JAVAVERSION:
 				return sortedValues.map((v) => ({ value: v, label: v.name }));
+
 			default:
 				return sortedValues.map((v) => ({ label: v.name }));
 		}
@@ -74,15 +88,20 @@ class ServiceManager {
 		bootVersion: string,
 	): Promise<IDependency[]> {
 		const metadata = await this.ensureMetadata(serviceUrl);
+
 		if (!metadata) {
 			throw new Error("Failed to fetch metadata.");
 		}
 
 		const groups: DependencyGroup[] = metadata.dependencies.values;
+
 		const ret: IDependency[] = [];
+
 		for (const group of groups) {
 			const groupName: string = group.name;
+
 			const starters = group.values;
+
 			for (const starter of starters) {
 				if (
 					!starter.versionRange ||
@@ -107,13 +126,16 @@ class ServiceManager {
 		const url = new URL(serviceUrl);
 		url.pathname = "/dependencies";
 		url.search = `?bootVersion=${bootVersion}`;
+
 		const rawJSONString: string = await downloadFile(
 			url.toString(),
 			true,
 			METADATA_HEADERS,
 		);
+
 		try {
 			const ret = JSON.parse(rawJSONString);
+
 			return ret;
 		} catch (error) {
 			throw new Error(`failed to parse response from ${url}`);
@@ -127,6 +149,7 @@ class ServiceManager {
 				true,
 				METADATA_HEADERS,
 			);
+
 			const metadata = JSON.parse(rawJSONString);
 			this.metadataMap.set(serviceUrl, metadata);
 		} catch (error) {

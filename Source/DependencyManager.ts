@@ -12,6 +12,7 @@ import { IDependency, ILink, ILinks, serviceManager } from "./model";
 import { readFileFromExtensionRoot, writeFileToExtensionRoot } from "./Utils";
 
 const HINT_CONFIRM: string = "Press <Enter> to continue.";
+
 const DEPENDENCIES_HISTORY_FILENAME: string = ".last_used_dependencies";
 
 export class DependencyManager {
@@ -29,6 +30,7 @@ export class DependencyManager {
 
 	public async initialize(dependencies: IDependency[]): Promise<void> {
 		this.dependencies = dependencies;
+
 		for (const dep of this.dependencies) {
 			this.dict[dep.id] = dep;
 		}
@@ -51,9 +53,11 @@ export class DependencyManager {
 			);
 		}
 		const ret: Array<QuickPickItem & IDependenciesItem> = [];
+
 		if (this.selectedIds.length === 0) {
 			if (options && options.hasLastSelected && this.lastselected) {
 				const item = this.genLastSelectedItem(this.lastselected);
+
 				if (item) {
 					ret.push(item);
 				}
@@ -68,8 +72,10 @@ export class DependencyManager {
 		});
 
 		const selectedDeps = this.getSelectedDependencies();
+
 		if (selectedDeps.length > 0) {
 			ret.push(newSeparator("Selected"));
+
 			const selectedItems = selectedDeps.map((dep) => ({
 				description: dep.group,
 				detail: dep.description,
@@ -83,8 +89,10 @@ export class DependencyManager {
 		}
 
 		const unselectedDeps = this.getUnselectedDependencies();
+
 		if (unselectedDeps.length > 0) {
 			let group;
+
 			for (const dep of unselectedDeps) {
 				if (group !== dep.group) {
 					group = dep.group;
@@ -119,6 +127,7 @@ export class DependencyManager {
 
 	public toggleDependency(id: string): void {
 		const index: number = this.selectedIds.indexOf(id);
+
 		if (index >= 0) {
 			this.selectedIds = this.selectedIds.filter((x: string) => x !== id);
 		} else {
@@ -131,9 +140,11 @@ export class DependencyManager {
 	): QuickPickItem & IDependenciesItem {
 		const availIdList: string[] =
 			idList && idList.split(",").filter((id: string) => this.dict[id]);
+
 		const availNameList: string[] =
 			availIdList &&
 			availIdList.map((id: string) => this.dict[id].name).filter(Boolean);
+
 		if (availNameList && availNameList.length) {
 			return {
 				description: "",
@@ -159,6 +170,7 @@ function newSeparator(name: string) {
 }
 function getLinkButtons(links?: ILinks): Array<QuickInputButton & ILink> {
 	const buttons: Array<QuickInputButton & ILink> = [];
+
 	if (links?.home?.href) {
 		const homeButton = {
 			iconPath: new ThemeIcon("home"),

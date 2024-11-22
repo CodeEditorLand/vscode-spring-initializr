@@ -21,11 +21,14 @@ export function runInTerminal(
 		addNewLine: true,
 		name: "default",
 	};
+
 	const { addNewLine, name, cwd } = Object.assign(defaultOptions, options);
+
 	if (terminals[name] === undefined) {
 		terminals[name] = window.createTerminal({ name });
 	}
 	terminals[name].show();
+
 	if (cwd) {
 		terminals[name].sendText(getCDCommand(cwd), true);
 	}
@@ -38,6 +41,7 @@ export function getCommand(cmd: string): string {
 			.getConfiguration("terminal")
 			.get<string>("integrated.shell.windows")
 			.toLowerCase();
+
 		if (windowsShell && windowsShell.indexOf("powershell.exe") > -1) {
 			return `& ${cmd}`; // PowerShell
 		} else {
@@ -54,6 +58,7 @@ export function getCDCommand(cwd: string): string {
 			.getConfiguration("terminal")
 			.get<string>("integrated.shell.windows")
 			.toLowerCase();
+
 		if (
 			windowsShell &&
 			windowsShell.indexOf("bash.exe") > -1 &&
@@ -92,9 +97,11 @@ export async function openDialogForFolder(
 				? workspace.workspaceFolders[0].uri
 				: undefined,
 	};
+
 	const result: Uri[] = await window.showOpenDialog(
 		Object.assign(options, customOptions),
 	);
+
 	if (result && result.length) {
 		return Promise.resolve(result[0]);
 	} else {
@@ -110,9 +117,11 @@ export async function openDialogForFile(
 		canSelectFolders: false,
 		canSelectMany: false,
 	};
+
 	const result: Uri[] = await window.showOpenDialog(
 		Object.assign(options, customOptions),
 	);
+
 	if (result && result.length) {
 		return Promise.resolve(result[0]);
 	} else {

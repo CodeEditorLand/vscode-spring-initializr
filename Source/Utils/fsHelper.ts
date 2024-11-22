@@ -14,6 +14,7 @@ export async function isDirectory(uri: Uri): Promise<boolean | undefined> {
 export async function pathExists(uri: Uri): Promise<boolean> {
 	try {
 		await workspace.fs.stat(uri);
+
 		return true;
 	} catch (error) {
 		return false;

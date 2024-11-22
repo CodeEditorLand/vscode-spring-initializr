@@ -46,8 +46,10 @@ export class SpecifyJavaVersionStep implements IStep {
 			workspace
 				.getConfiguration("spring.initializr")
 				.get<string>("defaultJavaVersion");
+
 		if (javaVersion) {
 			projectMetadata.javaVersion = javaVersion;
+
 			return true;
 		}
 		const pickMetaData: IPickMetadata<JavaVersion> = {
@@ -60,6 +62,7 @@ export class SpecifyJavaVersionStep implements IStep {
 				MatadataType.JAVAVERSION,
 			),
 		};
+
 		return await createPickBox(pickMetaData);
 	}
 }

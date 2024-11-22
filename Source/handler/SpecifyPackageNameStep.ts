@@ -72,6 +72,7 @@ export class SpecifyPackageNameStep implements IStep {
 				recommendedPackageName ||
 				SpecifyPackageNameStep.getInstance().defaultInput,
 		};
+
 		return await createInputBox(inputMetaData);
 	}
 }

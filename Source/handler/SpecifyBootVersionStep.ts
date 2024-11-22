@@ -38,6 +38,7 @@ export class SpecifyBootVersionStep implements IStep {
 			return projectMetadata.pickSteps.pop();
 		}
 		sendInfo(operationId, { bootVersion: projectMetadata.bootVersion });
+
 		return this.getNextStep();
 	}
 
@@ -54,6 +55,7 @@ export class SpecifyBootVersionStep implements IStep {
 				MatadataType.BOOTVERSION,
 			),
 		};
+
 		return await createPickBox(pickMetaData);
 	}
 }

@@ -46,8 +46,10 @@ export class SpecifyLanguageStep implements IStep {
 			workspace
 				.getConfiguration("spring.initializr")
 				.get<string>("defaultLanguage");
+
 		if (language) {
 			projectMetadata.language = language && language.toLowerCase();
+
 			return true;
 		}
 		const pickMetaData: IPickMetadata<Language> = {
@@ -60,6 +62,7 @@ export class SpecifyLanguageStep implements IStep {
 				MatadataType.LANGUAGE,
 			),
 		};
+
 		return await createPickBox(pickMetaData);
 	}
 }
