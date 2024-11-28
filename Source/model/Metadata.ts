@@ -38,8 +38,11 @@ interface ProjectType extends Identifiable {
 }
 
 export type BootVersion = Identifiable;
+
 export type Packaging = Identifiable;
+
 export type JavaVersion = Identifiable;
+
 export type Language = Identifiable;
 
 export interface DependencyGroup extends Category<Dependency>, Nameable {}
