@@ -26,9 +26,13 @@ export async function loadPackageInfo(
 	const { publisher, name, version, aiKey } = await fse.readJSON(
 		context.asAbsolutePath("./package.json"),
 	);
+
 	EXTENSION_AI_KEY = aiKey;
+
 	EXTENSION_PUBLISHER = publisher;
+
 	EXTENSION_NAME = name;
+
 	EXTENSION_VERSION = version;
 }
 
@@ -51,6 +55,7 @@ export async function downloadFile(
 	customHeaders?: {},
 ): Promise<string> {
 	const tempFilePath: string = path.join(getTempFolder(), md5(targetUrl));
+
 	await fse.ensureDir(getTempFolder());
 
 	if (await fse.pathExists(tempFilePath)) {
@@ -80,6 +85,7 @@ export async function downloadFile(
 			} else {
 				return reject(new Error("Unsupported protocol."));
 			}
+
 			client
 				.get(options, (res: http.IncomingMessage) => {
 					let rawData: string;
@@ -91,6 +97,7 @@ export async function downloadFile(
 					} else {
 						ws = fse.createWriteStream(tempFilePath);
 					}
+
 					res.on("data", (chunk: string | Buffer) => {
 						if (readContent) {
 							rawData += chunk;
@@ -98,11 +105,13 @@ export async function downloadFile(
 							ws.write(chunk);
 						}
 					});
+
 					res.on("end", () => {
 						if (readContent) {
 							resolve(rawData);
 						} else {
 							ws.end();
+
 							ws.on("close", () => {
 								resolve(tempFilePath);
 							});
@@ -124,7 +133,9 @@ export async function writeFileToExtensionRoot(
 		vscode.extensions.getExtension(getExtensionId()).extensionPath;
 
 	const filepath: string = path.join(extensionRootPath, relateivePath);
+
 	await fse.ensureFile(filepath);
+
 	await fse.writeFile(filepath, data);
 }
 
@@ -213,6 +224,7 @@ export async function getTargetPomXml(): Promise<vscode.Uri> {
 				.then((res) => res && res.value);
 		}
 	}
+
 	return undefined;
 }
 
@@ -225,6 +237,7 @@ function getRelativePathToWorkspaceFolder(file: vscode.Uri): string {
 			return path.relative(wf.uri.fsPath, file.fsPath);
 		}
 	}
+
 	return "";
 }
 
@@ -237,5 +250,6 @@ function getWorkspaceFolderName(file: vscode.Uri): string {
 			return wf.name;
 		}
 	}
+
 	return "";
 }

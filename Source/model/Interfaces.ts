@@ -4,22 +4,31 @@
 // Overview API
 export interface IDependency extends IValue {
 	group?: string;
+
 	versionRange?: string;
+
 	_links?: ILinks;
 }
 
 export interface ILinks {
 	// Count of starters by link types for Spring Boot v2.7.2: {reference: 95, guide: 39, home: 1, other: 1, sample: 7}
+
 	reference?: ILink;
+
 	guide?: ILink;
+
 	home?: ILink;
+
 	other?: ILink;
+
 	sample?: ILink;
 }
 
 export interface ILink {
 	href: string;
+
 	title?: string;
+
 	templated?: boolean;
 }
 
@@ -28,13 +37,17 @@ export interface ITopLevelAttribute {
 	type: AttributeType;
 	// tslint:disable-next-line:no-reserved-keywords
 	default?: any;
+
 	values?: IValue[];
 }
 
 export interface IValue {
 	id?: string;
+
 	name?: string;
+
 	description?: string;
+
 	values?: IValue[];
 }
 
@@ -48,30 +61,43 @@ export enum AttributeType {
 // Dependencies API
 export interface IMavenId {
 	groupId: string;
+
 	artifactId: string;
+
 	version?: string;
+
 	scope?: string;
+
 	bom?: string;
+
 	repository?: string;
 }
 
 export interface IRepository {
 	name: string;
+
 	url: string;
+
 	snapshotEnabled: boolean;
 }
 
 export interface IBom {
 	groupId: string;
+
 	artifactId: string;
+
 	version: string;
+
 	repositories: string[];
 }
 
 export interface IStarters {
 	bootVersion: string;
+
 	dependencies: { [id: string]: IMavenId };
+
 	repositories: { [id: string]: IRepository };
+
 	boms: { [id: string]: IBom };
 }
 
@@ -82,24 +108,33 @@ export interface XmlNode {
 
 export interface IDependencyNode extends XmlNode {
 	groupId: string[];
+
 	artifactId: string[];
+
 	version?: string[];
+
 	scope?: string[];
 }
 
 export interface IBomNode extends XmlNode {
 	groupId: string[];
+
 	artifactId: string[];
+
 	version: string[];
 	// tslint:disable-next-line:no-reserved-keywords
 	type: ["pom"];
+
 	scope: ["import"];
 }
 
 export interface IRepositoryNode extends XmlNode {
 	id: string[];
+
 	name: string[];
+
 	url: string[];
+
 	snapshots: [
 		{
 			enabled: [BooleanString];

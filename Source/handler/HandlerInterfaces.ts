@@ -8,6 +8,7 @@ import { Identifiable } from "../model/Metadata";
 
 export interface IStep {
 	getNextStep(): IStep | undefined;
+
 	execute(
 		operationId: string,
 		projectMetadata: IProjectMetadata,
@@ -16,48 +17,73 @@ export interface IStep {
 
 export interface IProjectMetadata {
 	serviceUrl?: string;
+
 	language?: string;
+
 	javaVersion?: string;
+
 	groupId?: string;
+
 	artifactId?: string;
+
 	packageName?: string;
+
 	packaging?: string;
+
 	bootVersion?: string;
+
 	dependencies?: IDependenciesItem;
+
 	pickSteps: IStep[];
 
 	defaults: IDefaultProjectData;
+
 	parentFolder?: ParentFolder;
 }
 
 export interface IDefaultProjectData {
 	language?: string;
+
 	javaVersion?: string;
+
 	groupId?: string;
+
 	artifactId?: string;
+
 	packaging?: string;
+
 	dependencies?: string[];
+
 	targetFolder?: string;
 }
 
 export interface IHandlerItem<T extends Identifiable> extends QuickPickItem {
 	label: string;
+
 	value?: T;
 }
 
 export interface IPickMetadata<T extends Identifiable> {
 	metadata: IProjectMetadata;
+
 	title: string;
+
 	pickStep: IStep;
+
 	placeholder: string;
+
 	items: Array<IHandlerItem<T>> | Promise<Array<IHandlerItem<T>>>;
 }
 
 export interface IInputMetaData {
 	metadata: IProjectMetadata;
+
 	title: string;
+
 	pickStep: IStep;
+
 	placeholder: string;
+
 	prompt: string;
 
 	defaultValue: string;

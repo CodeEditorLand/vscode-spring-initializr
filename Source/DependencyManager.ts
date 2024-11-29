@@ -17,14 +17,18 @@ const DEPENDENCIES_HISTORY_FILENAME: string = ".last_used_dependencies";
 
 export class DependencyManager {
 	public lastselected: string = null;
+
 	public dependencies: IDependency[] = [];
+
 	public dict: { [key: string]: IDependency } = {};
+
 	public selectedIds: string[] = [];
 
 	constructor(public bootVersion: string) {}
 
 	public updateLastUsedDependencies(v: IDependenciesItem): void {
 		writeFileToExtensionRoot(DEPENDENCIES_HISTORY_FILENAME, v.id);
+
 		this.lastselected = v.id;
 	}
 
@@ -34,9 +38,11 @@ export class DependencyManager {
 		for (const dep of this.dependencies) {
 			this.dict[dep.id] = dep;
 		}
+
 		const idList: string = await readFileFromExtensionRoot(
 			DEPENDENCIES_HISTORY_FILENAME,
 		);
+
 		this.lastselected = idList;
 	}
 
@@ -52,6 +58,7 @@ export class DependencyManager {
 				),
 			);
 		}
+
 		const ret: Array<QuickPickItem & IDependenciesItem> = [];
 
 		if (this.selectedIds.length === 0) {
@@ -63,6 +70,7 @@ export class DependencyManager {
 				}
 			}
 		}
+
 		ret.push({
 			description: "",
 			detail: HINT_CONFIRM,
@@ -85,6 +93,7 @@ export class DependencyManager {
 				// link buttons
 				buttons: getLinkButtons(dep._links),
 			}));
+
 			ret.push(...selectedItems);
 		}
 
@@ -96,8 +105,10 @@ export class DependencyManager {
 			for (const dep of unselectedDeps) {
 				if (group !== dep.group) {
 					group = dep.group;
+
 					ret.push(newSeparator(group));
 				}
+
 				ret.push({
 					description: dep.group,
 					detail: dep.description,
@@ -177,28 +188,35 @@ function getLinkButtons(links?: ILinks): Array<QuickInputButton & ILink> {
 			tooltip: links.home.title ?? "Homepage",
 			...links.home,
 		};
+
 		buttons.push(homeButton);
 	}
+
 	if (links?.sample?.href) {
 		const sampleButton = {
 			iconPath: new ThemeIcon("repo"),
 			tooltip: links.sample.title ?? "Sample",
 			...links.sample,
 		};
+
 		buttons.push(sampleButton);
 	}
+
 	if (links?.reference?.href) {
 		const referenceButton = {
 			iconPath: new ThemeIcon("link-external"),
 			tooltip: links.reference.title ?? "Reference",
 			...links.reference,
 		};
+
 		buttons.push(referenceButton);
 	}
+
 	return buttons;
 }
 
 export interface IDependenciesItem {
 	itemType: string;
+
 	id: string;
 }

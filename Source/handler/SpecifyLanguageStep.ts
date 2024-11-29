@@ -35,6 +35,7 @@ export class SpecifyLanguageStep implements IStep {
 		) {
 			return projectMetadata.pickSteps.pop();
 		}
+
 		return this.getNextStep();
 	}
 
@@ -52,6 +53,7 @@ export class SpecifyLanguageStep implements IStep {
 
 			return true;
 		}
+
 		const pickMetaData: IPickMetadata<Language> = {
 			metadata: projectMetadata,
 			title: "Spring Initializr: Specify project language",

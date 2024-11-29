@@ -23,6 +23,7 @@ export function getNodesByTag(text: string, tag: string): Node[] {
 	});
 
 	const ret: Node[] = [];
+
 	dfs(document, (node) => isTag(node) && node.tagName === tag, ret);
 
 	return ret;
@@ -34,6 +35,7 @@ function dfs(node: Node, pred: (arg: Node) => boolean, result: Node[]) {
 
 		return;
 	}
+
 	if (node instanceof NodeWithChildren) {
 		for (const child of (node as NodeWithChildren).children) {
 			dfs(child, pred, result);

@@ -5,8 +5,11 @@ import { BooleanString, IRepositoryNode } from "../Interfaces";
 
 export class RepositoryNode {
 	public id: string;
+
 	public name: string;
+
 	public url: string;
+
 	public snapshotEnabled: boolean;
 
 	constructor(
@@ -16,8 +19,11 @@ export class RepositoryNode {
 		snapshotEnabled: boolean,
 	) {
 		this.id = id;
+
 		this.name = name;
+
 		this.url = url;
+
 		this.snapshotEnabled = snapshotEnabled;
 	}
 

@@ -53,6 +53,7 @@ export class SpecifyArtifactIdStep implements IStep {
 		) {
 			return projectMetadata.pickSteps.pop();
 		}
+
 		return this.getNextStep();
 	}
 

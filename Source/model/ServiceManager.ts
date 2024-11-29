@@ -34,6 +34,7 @@ class ServiceManager {
 		if (!metadata) {
 			throw new Error("Failed to fetch metadata.");
 		}
+
 		let defaultLabel: string;
 
 		let values: any[];
@@ -41,24 +42,28 @@ class ServiceManager {
 		switch (type) {
 			case MatadataType.BOOTVERSION:
 				defaultLabel = metadata.bootVersion.default;
+
 				values = metadata.bootVersion.values;
 
 				break;
 
 			case MatadataType.JAVAVERSION:
 				defaultLabel = metadata.javaVersion.default;
+
 				values = metadata.javaVersion.values;
 
 				break;
 
 			case MatadataType.LANGUAGE:
 				defaultLabel = metadata.language.default;
+
 				values = metadata.language.values;
 
 				break;
 
 			case MatadataType.PACKAGING:
 				defaultLabel = metadata.packaging.default;
+
 				values = metadata.packaging.values;
 
 				break;
@@ -111,6 +116,7 @@ class ServiceManager {
 				}
 			}
 		}
+
 		return ret;
 	}
 
@@ -124,7 +130,9 @@ class ServiceManager {
 		bootVersion: string,
 	): Promise<IStarters> {
 		const url = new URL(serviceUrl);
+
 		url.pathname = "/dependencies";
+
 		url.search = `?bootVersion=${bootVersion}`;
 
 		const rawJSONString: string = await downloadFile(
@@ -151,6 +159,7 @@ class ServiceManager {
 			);
 
 			const metadata = JSON.parse(rawJSONString);
+
 			this.metadataMap.set(serviceUrl, metadata);
 		} catch (error) {
 			console.error(error);
@@ -161,6 +170,7 @@ class ServiceManager {
 		if (this.metadataMap.get(serviceUrl) === undefined) {
 			await this.fetch(serviceUrl);
 		}
+
 		return this.metadataMap.get(serviceUrl);
 	}
 }

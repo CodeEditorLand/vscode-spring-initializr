@@ -27,11 +27,13 @@ export function runInTerminal(
 	if (terminals[name] === undefined) {
 		terminals[name] = window.createTerminal({ name });
 	}
+
 	terminals[name].show();
 
 	if (cwd) {
 		terminals[name].sendText(getCDCommand(cwd), true);
 	}
+
 	terminals[name].sendText(getCommand(command), addNewLine);
 }
 
@@ -139,6 +141,8 @@ export async function getFromInputBox(
 
 interface ITerminalOptions {
 	addNewLine?: boolean;
+
 	name?: string;
+
 	cwd?: string;
 }

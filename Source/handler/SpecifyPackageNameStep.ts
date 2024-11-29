@@ -50,6 +50,7 @@ export class SpecifyPackageNameStep implements IStep {
 		) {
 			return projectMetadata.pickSteps.pop();
 		}
+
 		return this.getNextStep();
 	}
 

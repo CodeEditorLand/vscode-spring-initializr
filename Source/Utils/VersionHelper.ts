@@ -31,6 +31,7 @@ export function matchRange(version: string, range: string): boolean {
 			compareVersions(strictMatchGrp[2], version) >= 0
 		);
 	}
+
 	const horMatchGrp: RegExpMatchArray = range.match(halfopenRightRange);
 
 	if (horMatchGrp) {
@@ -39,6 +40,7 @@ export function matchRange(version: string, range: string): boolean {
 			compareVersions(horMatchGrp[2], version) > 0
 		);
 	}
+
 	const holMatchGrp: RegExpMatchArray = range.match(halfopenLeftRange);
 
 	if (holMatchGrp) {
@@ -64,6 +66,7 @@ export function compareVersions(a: string, b: string): number {
 	if (versionA.length === 5) {
 		versionA[3] = `${versionA[3]}-${versionA[4]}`;
 	}
+
 	if (versionB.length === 5) {
 		versionB[3] = `${versionB[3]}-${versionB[4]}`;
 	}
@@ -83,11 +86,13 @@ export function compareVersions(a: string, b: string): number {
 	const aqual: string = parseQualifier(aqualRaw);
 
 	const bqual: string = parseQualifier(bqualRaw);
+
 	result = qualifiers.indexOf(aqual) - qualifiers.indexOf(bqual);
 
 	if (result !== 0) {
 		return result;
 	}
+
 	return aqualRaw.localeCompare(bqualRaw);
 }
 

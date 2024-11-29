@@ -20,6 +20,7 @@ export async function activate(
 	context: vscode.ExtensionContext,
 ): Promise<void> {
 	await initializeFromJsonFile(context.asAbsolutePath("./package.json"));
+
 	await instrumentOperation("activation", initializeExtension)(context);
 }
 
@@ -101,6 +102,7 @@ async function initializeExtension(
 
 				if (targetFile) {
 					await vscode.window.showTextDocument(targetFile);
+
 					await new AddStartersHandler().run(_oid, targetFile);
 				} else {
 					vscode.window.showInformationMessage(
@@ -135,6 +137,7 @@ async function initializeExtension(
 					readmeFileUris[0],
 				);
 			}
+
 			await fs.promises.unlink(flagFile);
 		} catch (error) {
 			// do nothing

@@ -148,6 +148,7 @@ async function updateWorkspaceEdit(
 
 	if (contentBefore.trim() === "") {
 		insertOffset -= insertPos.character;
+
 		insertPos = insPosLineStart;
 	}
 
@@ -169,6 +170,7 @@ async function updateWorkspaceEdit(
 		indent,
 		eol,
 	);
+
 	edit.insert(currentDocument.uri, insertPos, targetText);
 
 	return edit;
@@ -192,16 +194,23 @@ function getIndentation(document: vscode.TextDocument, offset: number): string {
 
 interface IArtifact {
 	groupId: string;
+
 	artifactId: string;
+
 	version?: string;
+
 	scope?: string;
 }
 
 interface IBom {
 	groupId: string;
+
 	artifactId: string;
+
 	version: string;
+
 	scope?: string;
+
 	type?: string;
 }
 
@@ -285,6 +294,7 @@ class BOMNodes extends PomNode {
 				lines = PomNode.wrapWithParentNode(lines, indent, parent);
 			}
 		}
+
 		return lines;
 	}
 

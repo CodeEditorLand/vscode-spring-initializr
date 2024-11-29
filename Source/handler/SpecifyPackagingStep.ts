@@ -35,6 +35,7 @@ export class SpecifyPackagingStep implements IStep {
 		) {
 			return projectMetadata.pickSteps.pop();
 		}
+
 		return this.getNextStep();
 	}
 
@@ -52,6 +53,7 @@ export class SpecifyPackagingStep implements IStep {
 
 			return true;
 		}
+
 		const pickMetaData: IPickMetadata<Packaging> = {
 			metadata: projectMetadata,
 			title: "Spring Initializr: Specify packaging type",

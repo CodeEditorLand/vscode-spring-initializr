@@ -51,9 +51,11 @@ export async function specifyServiceUrl(
 		if (configValue.length === 1) {
 			return configValue[0];
 		}
+
 		if (projectMetadata !== undefined) {
 			projectMetadata.pickSteps.push(SpecifyServiceUrlStep.getInstance());
 		}
+
 		return await vscode.window.showQuickPick(configValue, {
 			ignoreFocusOut: true,
 			placeHolder: "Select the service URL.",
@@ -71,22 +73,30 @@ export async function createPickBox<T extends Identifiable>(
 	const resultPromise = new Promise<boolean>(async (resolve, reject) => {
 		const pickBox: QuickPick<IHandlerItem<T>> =
 			window.createQuickPick<IHandlerItem<T>>();
+
 		pickBox.title = pickMetadata.title;
+
 		pickBox.placeholder = pickMetadata.placeholder;
+
 		pickBox.ignoreFocusOut = true;
+
 		pickBox.busy = true;
+
 		pickBox.show();
 
 		try {
 			pickBox.items = await pickMetadata.items;
+
 			pickBox.busy = false;
 		} catch (error) {
 			pickBox.hide();
 
 			return reject(error);
 		}
+
 		if (pickMetadata.metadata.pickSteps.length > 0) {
 			pickBox.buttons = [QuickInputButtons.Back];
+
 			disposables.push(
 				pickBox.onDidTriggerButton((item) => {
 					if (item === QuickInputButtons.Back) {
@@ -95,11 +105,13 @@ export async function createPickBox<T extends Identifiable>(
 				}),
 			);
 		}
+
 		disposables.push(
 			pickBox.onDidAccept(() => {
 				if (!pickBox.selectedItems?.[0]) {
 					return;
 				}
+
 				if (pickMetadata.pickStep instanceof SpecifyLanguageStep) {
 					pickMetadata.metadata.language =
 						pickBox.selectedItems[0].label?.toLowerCase();
@@ -119,6 +131,7 @@ export async function createPickBox<T extends Identifiable>(
 					pickMetadata.metadata.bootVersion =
 						pickBox.selectedItems[0].value?.id;
 				}
+
 				pickMetadata.metadata.pickSteps.push(pickMetadata.pickStep);
 
 				return resolve(true);
@@ -151,10 +164,13 @@ export async function createPickBox<T extends Identifiable>(
 						),
 					);
 				}
+
 				return reject(new Error("Unknown picking step"));
 			}),
 		);
+
 		disposables.push(pickBox);
+
 		pickBox.show();
 	});
 
@@ -176,14 +192,20 @@ export async function createInputBox(
 
 	const result: boolean = await new Promise<boolean>((resolve, reject) => {
 		const inputBox: InputBox = window.createInputBox();
+
 		inputBox.title = inputMetaData.title;
+
 		inputBox.placeholder = inputMetaData.placeholder;
+
 		inputBox.prompt = inputMetaData.prompt;
+
 		inputBox.value = inputMetaData.defaultValue;
+
 		inputBox.ignoreFocusOut = true;
 
 		if (inputMetaData.metadata.pickSteps.length > 0) {
 			inputBox.buttons = [QuickInputButtons.Back];
+
 			disposables.push(
 				inputBox.onDidTriggerButton((item) => {
 					if (item === QuickInputButtons.Back) {
@@ -192,6 +214,7 @@ export async function createInputBox(
 				}),
 			);
 		}
+
 		disposables.push(
 			inputBox.onDidChangeValue(() => {
 				let validCheck: string | undefined;
@@ -207,17 +230,21 @@ export async function createInputBox(
 				) {
 					validCheck = packageNameValidation(inputBox.value);
 				}
+
 				inputBox.validationMessage = validCheck;
 			}),
 			inputBox.onDidAccept(() => {
 				if (inputBox.validationMessage) {
 					return;
 				}
+
 				if (inputMetaData.pickStep instanceof SpecifyGroupIdStep) {
 					inputMetaData.metadata.groupId = inputBox.value;
+
 					SpecifyGroupIdStep.getInstance().setDefaultInput(
 						inputBox.value,
 					);
+
 					inputMetaData.metadata.pickSteps.push(
 						SpecifyGroupIdStep.getInstance(),
 					);
@@ -225,9 +252,11 @@ export async function createInputBox(
 					inputMetaData.pickStep instanceof SpecifyArtifactIdStep
 				) {
 					inputMetaData.metadata.artifactId = inputBox.value;
+
 					SpecifyArtifactIdStep.getInstance().setDefaultInput(
 						inputBox.value,
 					);
+
 					inputMetaData.metadata.pickSteps.push(
 						SpecifyArtifactIdStep.getInstance(),
 					);
@@ -235,13 +264,16 @@ export async function createInputBox(
 					inputMetaData.pickStep instanceof SpecifyPackageNameStep
 				) {
 					inputMetaData.metadata.packageName = inputBox.value;
+
 					SpecifyPackageNameStep.getInstance().setDefaultInput(
 						inputBox.value,
 					);
+
 					inputMetaData.metadata.pickSteps.push(
 						SpecifyPackageNameStep.getInstance(),
 					);
 				}
+
 				return resolve(true);
 			}),
 			inputBox.onDidHide(() => {
@@ -264,15 +296,19 @@ export async function createInputBox(
 						),
 					);
 				}
+
 				return reject(new Error("Unknown inputting step"));
 			}),
 		);
+
 		disposables.push(inputBox);
+
 		inputBox.show();
 	});
 
 	for (const d of disposables) {
 		d.dispose();
 	}
+
 	return result;
 }

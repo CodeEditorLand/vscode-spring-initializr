@@ -26,6 +26,7 @@ function ensureNode(
 	if (isNullOrEmptyNode(parentNode[nodeName])) {
 		parentNode[nodeName] = [defaultValue];
 	}
+
 	return parentNode[nodeName][0];
 }
 
@@ -146,6 +147,7 @@ export function getBootVersion(projectNode: XmlNode): string {
 	) {
 		bootVersion = getNode(parentNode, "version");
 	}
+
 	return bootVersion;
 }
 

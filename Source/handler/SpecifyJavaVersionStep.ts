@@ -35,6 +35,7 @@ export class SpecifyJavaVersionStep implements IStep {
 		) {
 			return projectMetadata.pickSteps.pop();
 		}
+
 		return this.getNextStep();
 	}
 
@@ -52,6 +53,7 @@ export class SpecifyJavaVersionStep implements IStep {
 
 			return true;
 		}
+
 		const pickMetaData: IPickMetadata<JavaVersion> = {
 			metadata: projectMetadata,
 			title: "Spring Initializr: Specify Java version",

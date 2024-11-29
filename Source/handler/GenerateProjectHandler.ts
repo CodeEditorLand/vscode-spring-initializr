@@ -31,12 +31,16 @@ const OPEN_IN_CURRENT_WORKSPACE = "Add to Workspace";
 
 export class GenerateProjectHandler extends BaseHandler {
 	private projectType: ProjectType;
+
 	private outputUri: vscode.Uri;
+
 	private metadata: IProjectMetadata;
 
 	constructor(projectType: ProjectType, defaults?: IDefaultProjectData) {
 		super();
+
 		this.projectType = projectType;
+
 		this.metadata = {
 			pickSteps: [],
 			defaults: defaults || {},
@@ -54,7 +58,9 @@ export class GenerateProjectHandler extends BaseHandler {
 		let step: IStep | undefined = SpecifyServiceUrlStep.getInstance();
 
 		SpecifyArtifactIdStep.getInstance().resetDefaultInput();
+
 		SpecifyGroupIdStep.getInstance().resetDefaultInput();
+
 		SpecifyPackageNameStep.getInstance().resetDefaultInput();
 
 		while (step !== undefined) {
@@ -84,6 +90,7 @@ export class GenerateProjectHandler extends BaseHandler {
 			this.outputUri.fsPath,
 			".vscode/NEWLY_CREATED_BY_SPRING_INITIALIZR",
 		);
+
 		await fse.createFile(flagFile);
 
 		// Open project either is the same workspace or new workspace
@@ -144,7 +151,9 @@ export class GenerateProjectHandler extends BaseHandler {
 		];
 
 		const targetUrl = new URL(this.metadata.serviceUrl);
+
 		targetUrl.pathname = "/starter.zip";
+
 		targetUrl.search = `?${params.join("&")}`;
 
 		return targetUrl.toString();
@@ -204,6 +213,7 @@ async function specifyTargetFolder(
 			break;
 		}
 	}
+
 	return outputUri;
 }
 
@@ -223,16 +233,19 @@ async function downloadAndUnzip(
 
 					try {
 						p.report({ message: "Downloading zip package..." });
+
 						filepath = await downloadFile(targetUrl);
 					} catch (error) {
 						return reject(error);
 					}
 
 					p.report({ message: "Starting to unzip..." });
+
 					extract(filepath, { dir: targetFolder.fsPath }, (err) => {
 						if (err) {
 							return reject(err);
 						}
+
 						return resolve();
 					});
 				},
@@ -256,10 +269,12 @@ async function specifyOpenMethod(
 			OPEN_IN_NEW_WORKSPACE,
 			hasOpenFolder ? OPEN_IN_CURRENT_WORKSPACE : undefined,
 		].filter(Boolean);
+
 		openMethod = await vscode.window.showInformationMessage(
 			`Successfully generated. Location: ${projectLocation.fsPath}`,
 			...candidates,
 		);
 	}
+
 	return openMethod;
 }

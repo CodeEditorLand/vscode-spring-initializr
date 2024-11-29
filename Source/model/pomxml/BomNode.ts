@@ -5,12 +5,16 @@ import { IBomNode } from "../Interfaces";
 
 export class BomNode {
 	public groupId: string;
+
 	public artifactId: string;
+
 	public version: string;
 
 	constructor(gid: string, aid: string, ver: string) {
 		this.groupId = gid;
+
 		this.artifactId = aid;
+
 		this.version = ver;
 	}
 

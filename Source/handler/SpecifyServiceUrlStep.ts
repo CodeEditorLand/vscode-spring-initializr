@@ -33,6 +33,7 @@ export class SpecifyServiceUrlStep implements IStep {
 		if (projectMetadata.serviceUrl === undefined) {
 			throw new OperationCanceledError("Service URL not specified.");
 		}
+
 		return this.getNextStep();
 	}
 }

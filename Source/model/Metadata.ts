@@ -6,10 +6,15 @@
  */
 export interface Metadata {
 	bootVersion: Category<BootVersion>;
+
 	dependencies: Category<DependencyGroup>;
+
 	packaging: Category<Packaging>;
+
 	javaVersion: Category<JavaVersion>;
+
 	language: Category<Language>;
+
 	type: Category<ProjectType>;
 }
 
@@ -30,6 +35,7 @@ export interface Identifiable extends Nameable {
 
 interface Category<T extends Nameable> {
 	default?: string;
+
 	values: T[];
 }
 
@@ -49,5 +55,6 @@ export interface DependencyGroup extends Category<Dependency>, Nameable {}
 
 export interface Dependency extends Identifiable {
 	description?: string;
+
 	versionRange?: string;
 }

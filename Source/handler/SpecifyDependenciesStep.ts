@@ -44,6 +44,7 @@ export class SpecifyDependenciesStep implements IStep {
 		) {
 			return projectMetadata.pickSteps.pop();
 		}
+
 		sendInfo(operationId, {
 			depsType: projectMetadata.dependencies.itemType,
 			dependencies: projectMetadata.dependencies.id,
@@ -64,6 +65,7 @@ export class SpecifyDependenciesStep implements IStep {
 		let result: boolean = false;
 
 		const disposables: Disposable[] = [];
+
 		dependencyManager.selectedIds =
 			projectMetadata.defaults.dependencies || [];
 
@@ -73,18 +75,24 @@ export class SpecifyDependenciesStep implements IStep {
 					projectMetadata.serviceUrl,
 					{ hasLastSelected: true },
 				);
+
 			result = await new Promise<boolean>(async (resolve, reject) => {
 				const pickBox: QuickPick<QuickPickItem & IDependenciesItem> =
 					window.createQuickPick<QuickPickItem & IDependenciesItem>();
 				(pickBox.title = "Spring Initializr: Choose dependencies"),
 					(pickBox.placeholder = "Search for dependencies.");
+
 				pickBox.items = quickPickItems;
+
 				pickBox.ignoreFocusOut = true;
+
 				pickBox.matchOnDetail = true;
+
 				pickBox.matchOnDescription = true;
 
 				if (projectMetadata.pickSteps.length > 0) {
 					pickBox.buttons = [QuickInputButtons.Back];
+
 					disposables.push(
 						pickBox.onDidTriggerButton((item) => {
 							if (item === QuickInputButtons.Back) {
@@ -93,12 +101,15 @@ export class SpecifyDependenciesStep implements IStep {
 						}),
 					);
 				}
+
 				disposables.push(
 					pickBox.onDidAccept(() => {
 						if (!pickBox.selectedItems[0]) {
 							return;
 						}
+
 						current = pickBox.selectedItems[0];
+
 						resolve(true);
 					}),
 					pickBox.onDidHide(() => {
@@ -121,25 +132,33 @@ export class SpecifyDependenciesStep implements IStep {
 								projectMetadata.bootVersion,
 							);
 						}
+
 						sendInfo("", { name: "openStarterLink", starter });
+
 						commands.executeCommand("vscode.open", href);
 					}),
 				);
+
 				disposables.push(pickBox);
+
 				pickBox.show();
 			});
 
 			for (const d of disposables) {
 				d.dispose();
 			}
+
 			if (!result) {
 				return result;
 			}
+
 			if (current && current.itemType === "dependency") {
 				dependencyManager.toggleDependency(current.id);
 			}
 		} while (current && current.itemType === "dependency");
+
 		projectMetadata.dependencies = current;
+
 		dependencyManager.updateLastUsedDependencies(current);
 
 		return result;

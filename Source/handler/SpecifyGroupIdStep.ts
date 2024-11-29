@@ -53,6 +53,7 @@ export class SpecifyGroupIdStep implements IStep {
 		) {
 			return projectMetadata.pickSteps.pop();
 		}
+
 		return this.getNextStep();
 	}
 

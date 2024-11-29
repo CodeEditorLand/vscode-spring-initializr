@@ -92,6 +92,7 @@ export class AddStartersHandler extends BaseHandler {
 		});
 
 		const dependencyManager = new DependencyManager(bootVersion);
+
 		dependencyManager.selectedIds = [].concat(oldStarterIds);
 
 		let current: IDependenciesItem = null;
@@ -162,6 +163,7 @@ export class AddStartersHandler extends BaseHandler {
 		const boms = bomIds.map((id) => starters.boms[id]);
 
 		updatePom(entry, artifacts, boms);
+
 		vscode.window.showInformationMessage("Pom file successfully updated.");
 
 		return;
@@ -192,6 +194,7 @@ async function searchForBootVersion(uri: vscode.Uri): Promise<string> {
 		if (await isDirectory(newUri)) {
 			newUri = uri.with({ path: path.join(newPath, "pom.xml") });
 		}
+
 		if (await pathExists(newUri)) {
 			return await searchForBootVersion(newUri);
 		}
