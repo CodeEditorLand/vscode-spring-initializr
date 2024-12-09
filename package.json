@@ -176,7 +176,7 @@
 	"displayName": "Spring Initializr Java Support",
 	"icon": "resources/logo.png",
 	"main": "./dist/extension",
-	"name": "vscode-spring-initializr",
+	"name": "@codeeditorland/spring-initializr",
 	"scripts": {
 		"compile": "webpack --mode development",
 		"update-tpn": "node scripts/update-third-party-notice.js"
