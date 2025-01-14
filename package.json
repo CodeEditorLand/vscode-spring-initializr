@@ -171,10 +171,10 @@
 		"@types/glob": "8.1.0",
 		"@types/lodash": "4.17.14",
 		"@types/md5": "2.3.5",
-		"@types/node": "22.10.5",
+		"@types/node": "22.10.6",
 		"@types/xml2js": "0.4.14",
-		"glob": "11.0.0",
-		"ts-loader": "9.5.1"
+		"glob": "11.0.1",
+		"ts-loader": "9.5.2"
 	},
 	"icon": "resources/logo.png",
 	"aiKey": "05fb8871-fbf0-488f-8453-a74cf0ca9b93",
